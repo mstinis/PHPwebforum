@@ -1,0 +1,16 @@
+MATTHEW STINIS
+
+
+
+SCRUM 1 12/5/2017
+
+1. First scrum
+2. Start building login, register, profile-edit functions
+3. Need help figuring out Slim and Twig, basic PHP theory like superglobals
+
+
+Guide:
+
+1. What did I do/not do since last scrum
+2. What will I do until next scrum
+3. Where do I need help/what do I need to research
