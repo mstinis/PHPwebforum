@@ -1,5 +1,11 @@
 MATTHEW STINIS
 
+SCRUM 3 16/5/2017
+
+1. Started main project.php script
+2. Start building login, register, profile-edit functions
+3. Need help figuring out Slim
+
 SCRUM 2 15/5/2017
 
 1. Studied Slim/MeekroDB, planned out course of action

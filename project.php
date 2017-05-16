@@ -29,7 +29,7 @@ if (!isset($_SESSION['forumuser'])) {
 }
 
 $twig = $app->view()->getEnvironment();
-$twig->addGlobal('todouser', $_SESSION['todouser']);
+$twig->addGlobal('forumuser', $_SESSION['forumuser']);
 
 $app->get('/', function() use ($app) {
     if(!$_SESSION['forumuser']) {
@@ -83,6 +83,13 @@ $app->post('/login', function() use ($app) {
         $app->render('login_success.html.twig');
     }
 });
+
+
+$app->get('/logout', function() use ($app) {
+    unset($_SESSION['todouser']);
+    $app->render('logout.html.twig');
+});
+
 // end login block
 
 

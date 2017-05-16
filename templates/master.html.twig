@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/styles.css"/>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        {% block headExtra %}{% endblock %}
+    </head>
+    <body>
+        <div id="centerContent">
+            <div id="header">
+                {% if todouser %}
+                    Welcome {{ todouser.name }}, you may <a href="/logout">logout</a>
+                {% else %}
+                    You may <a href="/login">login</a> or <a href="/register">register</a>.
+                {% endif %}    
+            </div>    
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+            <div id="footer">
+                {% block footer %}
+                    &copy; Copyright 2011 by <a href="http://domain.invalid/">you</a>.
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

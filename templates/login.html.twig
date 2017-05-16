@@ -1,0 +1,15 @@
+{% extends "master.html.twig" %}
+
+{% block title %}Log In{% endblock title %}
+
+{% block content %}
+{% if error %}
+    <p class="errorList">Login failed, try again</p>
+{% endif %}
+
+<form method="post">
+    Email <input type="email" name="email"><br>
+    Password <input type="password" name="pass"><br>
+    <input type="submit" value="Login">
+</form>
+{% endblock content %}
