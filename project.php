@@ -9,7 +9,7 @@ DB::$host = '127.0.0.1';
 DB::$user = 'phpwebforum';
 DB::$password = '5zAijLF4Ooaojs6O';
 DB::$dbName = 'phpwebforum';
-DB::$port = '8005';
+DB::$port = '8008';
 DB::$encoding = 'utf8';
 
 // Slim creation and setup
@@ -92,5 +92,6 @@ $app->get('/logout', function() use ($app) {
 
 // end login block
 
+// board code
 
 $app->run();

@@ -1,5 +1,11 @@
 MATTHEW STINIS
 
+SCRUM 4 17/5/2017
+
+1. Started main boardview
+2. Continue profile-edit functions, continue building board
+3. How to approach admin panel, how to approach text field for threads and posts, how to handle multi-page threads... Unsure how to proceed, moving slowly
+
 SCRUM 3 16/5/2017
 
 1. Started main project.php script
