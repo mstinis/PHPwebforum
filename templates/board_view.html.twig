@@ -1,0 +1,26 @@
+{% extends "master.html.twig" %}
+
+{% block title %}All Forum Boards{% endblock title %}
+
+{% block content %}
+
+{% if errorList %}
+    <ul class="errorList">
+        {% for error in errorList %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>            
+{% endif %}
+
+<section>
+        <a href="#">Music Talk - Discuss your favorite sounds</a>
+        <p>You'll find hip hop, techno, rock, industrial/noise and more in here</p>
+
+        <a href="#">Gear/Technology</a>
+        <p>You'll find hip hop, techno, rock, industrial/noise and more in here</p>
+
+        <a href="#">Events - Past, present, and future</a>
+        <p>You'll find hip hop, techno, rock, industrial/noise and more in here</p>
+</section>
+    
+{% endblock content %}
