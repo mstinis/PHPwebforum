@@ -59,61 +59,88 @@ if (!isset($_SESSION['user'])) {
 $twig = $app->view()->getEnvironment();
 $twig->addGlobal('user', $_SESSION['user']);
 
+function verifyPassword($pass1) {
+    if (!preg_match('/[0-9;\'".,<>`~|!@#$%^&*()_+=-]/', $pass1) || (!preg_match('/[a-z]/', $pass1)) || (!preg_match('/[A-Z]/', $pass1)) || (strlen($pass1) < 8)) {
+        return "Password must be at least 8 characters " .
+                "long, contain at least one upper case, one lower case, " .
+                " one digit or special character";
+    }
+    return TRUE;
+}
+
 $app->get('/', function() use ($app) {
-    $app->render('index_please_login.html.twig');
+    if(!$_SESSION['user']) {
+       $app->render('index_please_login.html.twig');
+        return; 
+    }
+    // FIXME: incorrect table title and cell names
+    $userId = $_SESSION['user']['id'];
+    $userList = DB::query("SELECT * FROM users WHERE userId=%i", $userId);
+    print_r($userList);
 });
 
-// STATE 1: First show
+// AJAX: Is user with this email already registered?
+// FIXME: Make link to username, AND email
+$app->get('/ajax/emailused/:email', function($email) {
+    $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+    //echo json_encode($user, JSON_PRETTY_PRINT);
+    echo json_encode($user != null);    
+});
+
+// REGISTRATION STATE 1: First show
 $app->get('/register', function() use ($app) {
     $app->render('register.html.twig');
 });
 
-// Receiving a submission
-$app->post('/register', function() use ($app) {
-    // extract variables
-    $username = $app->request()->post('username');
-    $email = $app->request()->post('email');
-    $pass1 = $app->request()->post('pass1');
-    $pass2 = $app->request()->post('pass2');
-    // list of values to retain after a failed submission
-     $valueList = array('username' => $username, 'email' => $email);
-    // check for errors and collect error messages
+// State 2: submission
+$app->post('/register', function() use ($app, $log) {
+    $username = $app->request->post('username');
+    $email = $app->request->post('email');
+    $pass1 = $app->request->post('pass1');
+    $pass2 = $app->request->post('pass2');
+    $valueList = array('username' => $username, 'email' => $email);
+    // submission received - verify
     $errorList = array();
-    print_r($email);  
-    if ($email) {
-    $email = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-          
+    if (strlen($username) < 4) {
+        array_push($errorList, "Name must be at least 4 characters long");
+        unset($valueList['username']);
+    }
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
+        array_push($errorList, "Email does not look like a valid email");
+        unset($valueList['email']);
     } else {
-            array_push($errorList, "Email already in use");
-        }
-    if ($pass1 != $pass2) {
-        array_push($errorList, "Passwors do not match");
-    } else {
-        if (strlen($pass1) < 6) {
-            array_push($errorList, "Password too short, must be 6 characters or longer");
-        }
-        if (preg_match('/[A-Z]/', $pass1) != 1 || preg_match('/[a-z]/', $pass1) != 1 || preg_match('/[0-9]/', $pass1) != 1) {
-            array_push($errorList, "Password must contain at least one lowercase, "
-                    . "one uppercase letter, and a digit or special character");
+        $user = DB::queryFirstRow("SELECT userId FROM users WHERE email=%s", $email);
+        if ($user) {
+            array_push($errorList, "Email already registered");
+            unset($valueList['email']);
         }
     }
+    // ALTERNATIVE: if (($msg = verifyPassword($pass1)) !== TRUE) {
+    $msg = verifyPassword($pass1);
+    if ($msg !== TRUE) {
+        array_push($errorList, $msg);
+    } else if ($pass1 != $pass2) {
+        array_push($errorList, "Passwords don't match");
+    }
     //
-    print_r($errorList);
     if ($errorList) {
+        // STATE 3: submission failed        
         $app->render('register.html.twig', array(
-            'errorList' => $errorList,
-            'v' => $valueList
+            'errorList' => $errorList, 'v' => $valueList
         ));
     } else {
-        print_r($email);
+        // STATE 2: submission successful
         DB::insert('users', array(
-            'username' => $username,
-            'email' => $email,
-            'password' => $pass1
+            'username' => $username, 'email' => $email,
+            'password' => password_hash($pass1, CRYPT_BLOWFISH)
+                // 'password' => hash('sha256', $pass1)
         ));
+        $id = DB::insertId();
+        $log->debug(sprintf("User %s created", $id));
         $app->render('register_success.html.twig');
     }
 });
+// END REGISTRATION
 
 // LOGIN FORM
 $app->get('/login', function() use ($app) {
