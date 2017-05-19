@@ -9,8 +9,8 @@
     <body>
         <div id="centerContent">
             <div id="header">
-                {% if forumuser %}
-                    Welcome {{ todouser.name }}, you may <a href="/logout">logout</a>
+                {% if user %}
+                    Welcome {{ user.username }}, you may <a href="/logout">logout</a>
                 {% else %}
                     You may <a href="/login">login</a> or <a href="/register">register</a>.
                 {% endif %}    
