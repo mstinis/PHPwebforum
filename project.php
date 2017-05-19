@@ -72,20 +72,18 @@ $app->get('/register', function() use ($app) {
 $app->post('/register', function() use ($app) {
     // extract variables
     $username = $app->request()->post('username');
-    $email = $app->request()->post('email');
     $pass1 = $app->request()->post('pass1');
     $pass2 = $app->request()->post('pass2');
     // list of values to retain after a failed submission
-     $valueList = array('username' => $username, 'email' => $email);
+    $valueList = array('username' => $username);
     // check for errors and collect error messages
     $errorList = array();
-    print_r($email);  
-    if ($email) {
-    $email = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-          
+
+    if ($username) {
+        $user = DB::queryFirstRow("SELECT * FROM users WHERE username=%s", $username);
     } else {
-            array_push($errorList, "Email already in use");
-        }
+        array_push($errorList, "Username already in use");
+    }
     if ($pass1 != $pass2) {
         array_push($errorList, "Passwors do not match");
     } else {
@@ -94,21 +92,18 @@ $app->post('/register', function() use ($app) {
         }
         if (preg_match('/[A-Z]/', $pass1) != 1 || preg_match('/[a-z]/', $pass1) != 1 || preg_match('/[0-9]/', $pass1) != 1) {
             array_push($errorList, "Password must contain at least one lowercase, "
-                    . "one uppercase letter, and a digit or special character");
+                    . "one uppercase letter, and a digit");
         }
     }
     //
-    print_r($errorList);
     if ($errorList) {
         $app->render('register.html.twig', array(
             'errorList' => $errorList,
             'v' => $valueList
         ));
     } else {
-        print_r($email);
         DB::insert('users', array(
             'username' => $username,
-            'email' => $email,
             'password' => $pass1
         ));
         $app->render('register_success.html.twig');
@@ -121,12 +116,11 @@ $app->get('/login', function() use ($app) {
 });
 
 $app->post('/login', function() use ($app) {
-//    print_r($_POST);    
-    $email = $app->request()->post('email');
+    $username = $app->request()->post('username');
     $pass = $app->request()->post('pass');
     // verification    
     $error = false;
-    $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+    $user = DB::queryFirstRow("SELECT * FROM users WHERE username=%s", $username);
     if (!$user) {
         $error = true;
     } else {
@@ -145,21 +139,22 @@ $app->post('/login', function() use ($app) {
 });
 
 
+
 $app->get('/logout', function() use ($app) {
     unset($_SESSION['user']);
     $app->render('logout.html.twig');
 });
 
 // end login block
-
 // board code
 
 $app->get('/board', function() use ($app) {
-   $app->render('board_view.html.twig'); 
+    $app->render('board_view.html.twig');
 });
 
 // list of threads in a board
 $app->get('/board/:boardId', function() {
+    
 });
 
 // view of one thread on a board
@@ -169,13 +164,17 @@ $app->get('/thread/:threadId', function($threadId) {
 });
 // 3-state form to create new thread in a board
 $app->get('/board/:boardId/newThread', function() {
+    
 });
 $app->post('/board/:boardId/newThread', function() {
+    
 });
 // 3-state form to reply to a thread
 $app->get('/thread/:threadId/reply', function() {
+    
 });
 $app->get('/thread/:threadId/reply', function() {
+    
 });
 
 
