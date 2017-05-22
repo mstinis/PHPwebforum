@@ -1,0 +1,12 @@
+{% extends "master.html.twig" %}
+
+{% block title %}Reply to Thread{% endblock title %}
+
+{% block content %}
+    <h1>Reply</h1>
+    <form method='post'>
+        Topic: <input type='text' name='title'><br>
+        <textarea name='body'>Enter body here...</textarea><br>
+        <input type='submit' value='Submit'>
+    </form>
+{% endblock content %}

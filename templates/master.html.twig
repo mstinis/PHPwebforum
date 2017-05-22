@@ -13,7 +13,8 @@
                     Welcome {{ user.username }}, you may <a href="/logout">logout</a>
                 {% else %}
                     You may <a href="/login">login</a> or <a href="/register">register</a>.
-                {% endif %}    
+                {% endif %}
+                <p>Return to <a href="/board">board directory</a><p>
             </div>    
             <div id="content">
                 {% block content %}{% endblock %}
