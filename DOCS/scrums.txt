@@ -1,5 +1,12 @@
 MATTHEW STINIS
 
+SCRUM 6 23/5/2017
+
+1. Got login, register, boardview and threadview running
+2. Continue building board, create ability to post
+3. How to generate and attach current date when making new thread/newpost
+https://stackoverflow.com/questions/470617/how-to-get-the-current-date-and-time-in-php
+
 SCRUM 5 18/5/2017
 
 1. Started password recovery

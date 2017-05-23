@@ -17,7 +17,7 @@ DB::$host = '127.0.0.1';
 DB::$user = 'phpwebforum';
 DB::$password = '5zAijLF4Ooaojs6O';
 DB::$dbName = 'phpwebforum';
-DB::$port = '3306';
+DB::$port = '3333';
 DB::$encoding = 'utf8';
 
 DB::$error_handler = 'sql_error_handler';
@@ -59,11 +59,11 @@ if (!isset($_SESSION['user'])) {
 $twig = $app->view()->getEnvironment();
 $twig->addGlobal('user', $_SESSION['user']);
 
-$app->get('/', function() use ($app) {
-    $app->render('index_please_login.html.twig');
-});
+//$app->get('/', function() use ($app) {
+//    $app->render('index_please_login.html.twig');
+//});
 
-// STATE 1: First show
+// REGISTER FORM
 $app->get('/register', function() use ($app) {
     $app->render('register.html.twig');
 });
@@ -110,6 +110,8 @@ $app->post('/register', function() use ($app) {
     }
 });
 
+// END REGISTER
+
 // LOGIN FORM
 $app->get('/login', function() use ($app) {
     $app->render('login.html.twig');
@@ -143,8 +145,9 @@ $app->get('/logout', function() use ($app) {
     $app->render('logout.html.twig');
 });
 
-// end login block
-// board code
+// END LOGIN
+
+// BOARD CODE
 
 $app->get('/board', function() use ($app) {
     $app->render('board_view.html.twig');
@@ -203,7 +206,8 @@ $app->post('/board/:boardId/newthread', function() use ($app) {
         array_push($errorList, "Title must be between 2 and 100 characters");
     }
     // TODO: generate date according to date of thread creation
-    
+//    date_default_timezone_set('Australia/Melbourne');
+//    $date = date('m/d/Y h:i:s a', time());
     // receive data and insert
     if (!$errorList) {
         $boardId = $_SESSION['user']['id'];
@@ -236,7 +240,8 @@ $app->post('/thread/:threadId/reply', function() use ($app) {
         array_push($errorList, "Body cannot be empty when replying to a thread");
     }
     // TODO: generate date according to date of reply/post
-    
+//    date_default_timezone_set('Australia/Melbourne');
+//    $date = date('m/d/Y h:i:s a', time());
     // receive data and insert
     if (!$errorList) {
         $threadId = $_SESSION['user']['id'];
