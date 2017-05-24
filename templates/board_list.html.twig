@@ -1,0 +1,14 @@
+{% extends "master.html.twig" %}
+
+{% block title %}All Forum Boards{% endblock title %}
+
+{% block content %}
+
+<section>
+    <p>Boards:</p>
+    {% for board in boardList %}
+        <a href="/board/{{board.boardId}}">{{board.title}}</a><br>
+    {% endfor %}
+</section>
+    
+{% endblock content %}

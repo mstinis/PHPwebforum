@@ -1,18 +1,16 @@
 {% extends "master.html.twig" %}
 
-{% block title %}All Forum Boards{% endblock title %}
+{% block title %}Board: {{board.title}}{% endblock title %}
 
 {% block content %}
 
 <section>
-        <a href="/board/musictalk">Music Talk - Discuss your favorite sounds</a>
-        <p>Discuss your favorite music - hip hop, techno, rock, industrial/noise and more</p>
-
-        <a href="/board/geartech">Gear/Technology</a>
-        <p>Everything from guitars, pedals, amps, synths, electronics, mixing and mastering techniques</p>
-
-        <a href="/board/events">Events - Past, present, and future</a>
-        <p>Let people know of any upcoming events that might be of interest</p>
+    <h1>{{board.title}}</h1>
+    <a href="/board/{{board.boardId}}/newthread">Start new thread</a>
+    <p>Threads:</p>
+    {% for thread in threadList %}
+        <a href="/thread/{{thread.threadId}}">{{thread.title}}</a><br>
+    {% endfor %}
 </section>
     
 {% endblock content %}

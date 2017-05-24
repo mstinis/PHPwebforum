@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('EST');
+
 session_cache_limiter(false);
 session_start();
 
@@ -17,7 +19,7 @@ DB::$host = '127.0.0.1';
 DB::$user = 'phpwebforum';
 DB::$password = '5zAijLF4Ooaojs6O';
 DB::$dbName = 'phpwebforum';
-DB::$port = '3306';
+DB::$port = 3333;
 DB::$encoding = 'utf8';
 
 DB::$error_handler = 'sql_error_handler';
@@ -149,43 +151,21 @@ $app->get('/logout', function() use ($app) {
 
 // BOARD CODE
 
-$app->get('/board', function() use ($app) {
-    $app->render('board_view.html.twig');
+$app->get('/', function() use ($app) {
+    $boardList = DB::query("SELECT * FROM boards");
+    $app->render('board_list.html.twig', array("boardList" => $boardList));
 });
 
 //// list of threads in a board
-//$app->get('/board(/:boardId)', function($id) use ($app) {
-//   $thread = DB::queryFirstRow('SELECT * FROM boards WHERE boardId=%i', $id);
-//   $app->render('board_view.html.twig', array(
-//        't' => $thread
-//    ));
-//    
-//});
-
-
-$app->get('/board/musictalk', function() use ($app) {
-    DB::insertUpdate('boards', array(
-        'boardId' => '1',
-        'title' => 'Musictalk'
+$app->get('/board/:id', function($id) use ($app) {
+   $board = DB::queryFirstRow('SELECT * FROM boards WHERE boardId=%i', $id);
+   $threadList = DB::query('SELECT * FROM threads WHERE boardId=%i', $id);
+   $app->render('board_view.html.twig', array(
+        'board' => $board, 'threadList' => $threadList
     ));
-    $app->render('board_musictalk.html.twig');
+    
 });
 
-$app->get('/board/geartech', function() use ($app) {
-    DB::insertUpdate('boards', array(
-        'boardId' => '2',
-        'title' => 'Geartech'
-    ));
-    $app->render('board_geartech.html.twig');
-});
-
-$app->get('/board/events', function() use ($app) {
-    DB::insertUpdate('boards', array(
-        'boardId' => '3',
-        'title' => 'Events'
-    ));
-    $app->render('board_events.html.twig');
-});
 
 // view of one thread on a board
 $app->get('/thread/:threadId', function($threadId) use ($app) {
@@ -194,16 +174,15 @@ $app->get('/thread/:threadId', function($threadId) use ($app) {
 });
 // 3-state form to create new thread in a board
 $app->get('/board/:boardId/newthread', function($boardId) use ($app) {
+    // FIXME: only logged in users can access
     $app->render('new_thread.html.twig', array('boardId' => $boardId));
     print_r($boardId);
 });
 
-$boardNames = array(
-    '1' => 'musictalk',
-    '2' => 'geartech',
-    '3' => 'events'
-); 
+
 $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
+    // FIXME: only logged in users can access
+    $userId = $_SESSION['user']['userId'];
     $title = $app->request()->post('title');
     $body = $app->request()->post('body');
 //    $postList = array('title' => $title, 'date' => $date);
@@ -212,18 +191,24 @@ $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
     if (strlen($title) < 2 || strlen($title) > 100) {
         array_push($errorList, "Title must be between 2 and 100 characters");
     }
-    // TODO: generate date according to date of thread creation
-    date_default_timezone_set('Canada/Montreal');
+    // TODO: generate date according to date of thread creation    
     $date = date('m/d/Y h:i:s a', time());
     // receive data and insert
     if (!$errorList) {
-        DB::insert('thread', array(
+        DB::insert('threads', array(
             'boardId' => $boardId,
             'title' => $title,
+            'date' => $date
+        ));
+        $threadId = DB::insertId();
+        DB::insert('posts', array(
+            'threadId' => $threadId,
+            'userId' => $userId,
             'body' => $body,
             'date' => $date
         ));
-        $app->render('/board_' . $boardNames[$boardId] . '.html.twig'); // correct?
+        $app->render('new_thread_success.html.twig',
+                array('threadId' => $threadId));
     } else {
         $app->render('new_thread.html.twig', array(
             'p' => $postList
