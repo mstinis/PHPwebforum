@@ -3,6 +3,14 @@
 {% block title %}Montreal Event Threads{% endblock title %}
 
 {% block content %}
+    {% if threads|length %}
+        <ul class="threads">
+            {% for thread in threads %}
+                <li><span>{{ thread.title }}</span></li>
+                {% endfor %}
+        </ul>            
+    {% endif %} 
+    
     <h1>Montreal Events</h1>
     <section>
         <a href="#">Tonight at Casa Del Popolo</a><br><br>

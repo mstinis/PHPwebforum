@@ -17,7 +17,7 @@ DB::$host = '127.0.0.1';
 DB::$user = 'phpwebforum';
 DB::$password = '5zAijLF4Ooaojs6O';
 DB::$dbName = 'phpwebforum';
-DB::$port = '3333';
+DB::$port = '3306';
 DB::$encoding = 'utf8';
 
 DB::$error_handler = 'sql_error_handler';
@@ -193,30 +193,37 @@ $app->get('/thread/:threadId', function($threadId) use ($app) {
     $app->render('thread_view.html.twig', array('postList' => $postList));
 });
 // 3-state form to create new thread in a board
-$app->get('/board/:boardId/newthread', function() use ($app) {
-    $app->render('new_thread.html.twig');
+$app->get('/board/:boardId/newthread', function($boardId) use ($app) {
+    $app->render('new_thread.html.twig', array('boardId' => $boardId));
+    print_r($boardId);
 });
-$app->post('/board/:boardId/newthread', function() use ($app) {
+
+$boardNames = array(
+    '1' => 'musictalk',
+    '2' => 'geartech',
+    '3' => 'events'
+); 
+$app->post('/board/:boardId/newthread', function($boardId) use ($app) {
     $title = $app->request()->post('title');
-    $date = $app->request()->post('date');
-    $postList = array('title' => $title, 'date' => $date);
+    $body = $app->request()->post('body');
+//    $postList = array('title' => $title, 'date' => $date);
     // verify inputs
     $errorList = array();
     if (strlen($title) < 2 || strlen($title) > 100) {
         array_push($errorList, "Title must be between 2 and 100 characters");
     }
     // TODO: generate date according to date of thread creation
-//    date_default_timezone_set('Australia/Melbourne');
-//    $date = date('m/d/Y h:i:s a', time());
+    date_default_timezone_set('Canada/Montreal');
+    $date = date('m/d/Y h:i:s a', time());
     // receive data and insert
     if (!$errorList) {
-        $boardId = $_SESSION['user']['id'];
         DB::insert('thread', array(
             'boardId' => $boardId,
             'title' => $title,
+            'body' => $body,
             'date' => $date
         ));
-        $app->render('new_thread_success.html.twig');
+        $app->render('/board_' . $boardNames[$boardId] . '.html.twig'); // correct?
     } else {
         $app->render('new_thread.html.twig', array(
             'p' => $postList
@@ -240,7 +247,7 @@ $app->post('/thread/:threadId/reply', function() use ($app) {
         array_push($errorList, "Body cannot be empty when replying to a thread");
     }
     // TODO: generate date according to date of reply/post
-//    date_default_timezone_set('Australia/Melbourne');
+//    date_default_timezone_set('Canada/Montreal');
 //    $date = date('m/d/Y h:i:s a', time());
     // receive data and insert
     if (!$errorList) {

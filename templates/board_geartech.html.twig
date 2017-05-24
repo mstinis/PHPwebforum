@@ -3,6 +3,14 @@
 {% block title %}Gear/Tech Threads{% endblock title %}
 
 {% block content %}
+    {% if threads|length %}
+        <ul class="threads">
+            {% for thread in threads %}
+                <li><span>{{ thread.title }}</span></li>
+                {% endfor %}
+        </ul>            
+    {% endif %} 
+    
     <h1>Gear and Tech Discussion</h1>
     <section>
         <a href="#">MS-20 module!</a><br><br>

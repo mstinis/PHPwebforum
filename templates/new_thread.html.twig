@@ -3,6 +3,15 @@
 {% block title %}New Thread{% endblock title %}
 
 {% block content %}
+
+    {% if errorList %}
+        <ul class="errorList">
+            {% for error in errorList %}
+                <li>{{ error }}</li>
+                {% endfor %}
+        </ul>            
+    {% endif %} 
+
     <h1>New Thread</h1>
     <form method='post'>
         Topic: <input type='text' name='title'><br>

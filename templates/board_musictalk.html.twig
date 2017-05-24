@@ -3,6 +3,14 @@
 {% block title %}Music Talk Threads{% endblock title %}
 
 {% block content %}
+    {% if threads|length %}
+        <ul class="threads">
+            {% for thread in threads %}
+                <li><span>{{ thread.title }}</span></li>
+                {% endfor %}
+        </ul>            
+    {% endif %} 
+
     <h1>Music Talk</h1>
     <section>
         <a href="#">Hip-hop thread</a><br><br>
