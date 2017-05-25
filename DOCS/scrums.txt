@@ -1,5 +1,17 @@
 MATTHEW STINIS
 
+SCRUM 8 25/5/2017
+
+1. Got boardlist to link to database, new posts appear on site but won't add to database
+2. Create ability to post
+3. How to enable posting while logged in/How to add search post function
+
+SCRUM 7 24/5/2017
+
+1. Got boardlist to link to database
+2. Continue building threadview, create ability to post
+3. How to enable posting while logged in
+
 SCRUM 6 23/5/2017
 
 1. Got login, register, boardview and threadview running
@@ -46,3 +58,6 @@ Guide:
 1. What did I do/not do since last scrum
 2. What will I do until next scrum
 3. Where do I need help/what do I need to research
+
+
+http://www.codediesel.com/php/create-a-quick-rest-api-using-slim-framework/

@@ -169,14 +169,16 @@ $app->get('/board/:id', function($id) use ($app) {
 
 // view of one thread on a board
 $app->get('/thread/:threadId', function($threadId) use ($app) {
-    $postList = DB::query("SELECT * FROM posts WHERE boardId=%i AND threadId=%", $threadId);
-    $app->render('thread_view.html.twig', array('postList' => $postList));
+    $thread = DB::queryFirstRow("SELECT * FROM threads WHERE threadId=%i", $threadId);
+    $postList = DB::query("SELECT * FROM posts WHERE threadId=%i", $threadId);
+    $app->render('thread_view.html.twig', array('thread' => $thread, 'postList' => $postList));
 });
+
 // 3-state form to create new thread in a board
 $app->get('/board/:boardId/newthread', function($boardId) use ($app) {
     // FIXME: only logged in users can access
-    $app->render('new_thread.html.twig', array('boardId' => $boardId));
-    print_r($boardId);
+    $app->render('thread_new.html.twig', array('boardId' => $boardId));
+    // print_r($boardId);
 });
 
 
@@ -185,7 +187,7 @@ $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
     $userId = $_SESSION['user']['userId'];
     $title = $app->request()->post('title');
     $body = $app->request()->post('body');
-//    $postList = array('title' => $title, 'date' => $date);
+    $postList = array('title' => $title, 'body' => $body);
     // verify inputs
     $errorList = array();
     if (strlen($title) < 2 || strlen($title) > 100) {
@@ -204,20 +206,21 @@ $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
         DB::insert('posts', array(
             'threadId' => $threadId,
             'userId' => $userId,
+            'title' => $title,
             'body' => $body,
             'date' => $date
         ));
-        $app->render('new_thread_success.html.twig',
+        $app->render('thread_new_success.html.twig',
                 array('threadId' => $threadId));
     } else {
-        $app->render('new_thread.html.twig', array(
+        $app->render('thread_new.html.twig', array(
             'p' => $postList
         ));
     }
 });
 // 3-state form to reply to a thread
 $app->get('/thread/:threadId/reply', function() use ($app) {
-    $app->render('view_thread.html.twig');
+    $app->render('thread_view.html.twig');
 });
 $app->post('/thread/:threadId/reply', function() use ($app) {
     $title = $app->request()->post('title');
@@ -232,8 +235,7 @@ $app->post('/thread/:threadId/reply', function() use ($app) {
         array_push($errorList, "Body cannot be empty when replying to a thread");
     }
     // TODO: generate date according to date of reply/post
-//    date_default_timezone_set('Canada/Montreal');
-//    $date = date('m/d/Y h:i:s a', time());
+    $date = date('m/d/Y h:i:s a', time());
     // receive data and insert
     if (!$errorList) {
         $threadId = $_SESSION['user']['id'];
@@ -242,9 +244,9 @@ $app->post('/thread/:threadId/reply', function() use ($app) {
             'title' => $title,
             'body' => $body
         ));
-        $app->render('new_reply_success.html.twig');
+        $app->render('reply_new_success.html.twig');
     } else {
-        $app->render('new_reply.html.twig', array(
+        $app->render('reply_new.html.twig', array(
             'p' => $postList
         ));
     }

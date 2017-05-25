@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3333
--- Generation Time: May 19, 2017 at 08:22 PM
+-- Generation Time: May 25, 2017 at 05:52 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -29,7 +29,16 @@ SET time_zone = "+00:00";
 CREATE TABLE `boards` (
   `boardId` int(11) NOT NULL,
   `title` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data for table `boards`
+--
+
+INSERT INTO `boards` (`boardId`, `title`) VALUES
+(1, 'Musictalk'),
+(2, 'Geartech'),
+(3, 'Events');
 
 -- --------------------------------------------------------
 
@@ -46,6 +55,16 @@ CREATE TABLE `posts` (
   `body` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`postId`, `threadId`, `userId`, `date`, `title`, `body`) VALUES
+(5, 1, 3, '0000-00-00', 'Hello!', 'My first post'),
+(6, 2, 3, '0000-00-00', 'I LOVE microkorgs!!!', 'Not.'),
+(7, 3, 3, '0000-00-00', 'I saw Sunn O)))', 'Got tinnitus as a result :D'),
+(8, 4, 3, '0000-00-00', 'woW ME', 'Enter body here...');
+
 -- --------------------------------------------------------
 
 --
@@ -59,7 +78,17 @@ CREATE TABLE `threads` (
   `date` date NOT NULL,
   `replies` int(250) NOT NULL,
   `views` int(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data for table `threads`
+--
+
+INSERT INTO `threads` (`threadId`, `boardId`, `title`, `date`, `replies`, `views`) VALUES
+(1, 1, 'Hello!', '0000-00-00', 0, 0),
+(2, 2, 'I LOVE microkorgs!!!', '0000-00-00', 0, 0),
+(3, 3, 'I saw Sunn O)))', '0000-00-00', 0, 0),
+(4, 3, 'woW ME', '0000-00-00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -78,7 +107,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userId`, `username`, `password`) VALUES
-(2, 'mstinis', 'abC123');
+(2, 'mstinis', 'abC123'),
+(3, 'lalala', 'abC123');
 
 --
 -- Indexes for dumped tables
@@ -120,22 +150,22 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `boards`
 --
 ALTER TABLE `boards`
-  MODIFY `boardId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `boardId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `threads`
 --
 ALTER TABLE `threads`
-  MODIFY `threadId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `threadId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
 --
