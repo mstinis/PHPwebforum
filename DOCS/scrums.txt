@@ -1,5 +1,12 @@
 MATTHEW STINIS
 
+
+SCRUM 9 25/5/2017
+
+1. Posts appear on DB
+2. Create ability to reply to original post
+3. How to enable posting while logged in/How to add search post function
+
 SCRUM 8 25/5/2017
 
 1. Got boardlist to link to database, new posts appear on site but won't add to database

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3333
--- Generation Time: May 25, 2017 at 05:52 PM
+-- Generation Time: May 26, 2017 at 07:54 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -51,19 +51,22 @@ CREATE TABLE `posts` (
   `threadId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `date` date NOT NULL,
-  `title` varchar(100) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
   `body` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 --
 -- Dumping data for table `posts`
 --
 
 INSERT INTO `posts` (`postId`, `threadId`, `userId`, `date`, `title`, `body`) VALUES
-(5, 1, 3, '0000-00-00', 'Hello!', 'My first post'),
-(6, 2, 3, '0000-00-00', 'I LOVE microkorgs!!!', 'Not.'),
-(7, 3, 3, '0000-00-00', 'I saw Sunn O)))', 'Got tinnitus as a result :D'),
-(8, 4, 3, '0000-00-00', 'woW ME', 'Enter body here...');
+(1, 1, 3, '0000-00-00', 'Hello!', 'My first post'),
+(2, 2, 3, '0000-00-00', 'I LOVE microkorgs!!!', 'Not.'),
+(3, 3, 3, '0000-00-00', 'I saw Sunn O)))', 'Got tinnitus as a result :D'),
+(4, 4, 3, '0000-00-00', 'woW ME', 'Enter body here...'),
+(5, 5, 2, '0000-00-00', 'Empty body', ''),
+(6, 6, 2, '0000-00-00', 'I like noise music', 'In other words: It is screeching, pounding dissonance. It is not music.'),
+(7, 7, 3, '0000-00-00', 'Hello Chen', 'I am here!');
 
 -- --------------------------------------------------------
 
@@ -88,7 +91,10 @@ INSERT INTO `threads` (`threadId`, `boardId`, `title`, `date`, `replies`, `views
 (1, 1, 'Hello!', '0000-00-00', 0, 0),
 (2, 2, 'I LOVE microkorgs!!!', '0000-00-00', 0, 0),
 (3, 3, 'I saw Sunn O)))', '0000-00-00', 0, 0),
-(4, 3, 'woW ME', '0000-00-00', 0, 0);
+(4, 3, 'woW ME', '0000-00-00', 0, 0),
+(5, 1, 'Empty body', '0000-00-00', 0, 0),
+(6, 1, 'I like noise music', '0000-00-00', 0, 0),
+(7, 1, 'Hello Chen', '0000-00-00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -107,6 +113,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userId`, `username`, `password`) VALUES
+(1, 'jerry', 'abC123'),
 (2, 'mstinis', 'abC123'),
 (3, 'lalala', 'abC123');
 
@@ -155,12 +162,12 @@ ALTER TABLE `boards`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `threads`
 --
 ALTER TABLE `threads`
-  MODIFY `threadId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `threadId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --

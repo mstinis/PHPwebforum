@@ -15,7 +15,11 @@
                     You may <a href="/login">login</a> or <a href="/register">register</a>.
                 {% endif %}
                 <p>Return to <a href="/">board directory</a><p>
-            </div>    
+                <form method="get" action="/search">
+                    <input type="text" name="keywords">
+                    <input type="submit" value="Search">
+                </form>
+            </div>            
             <div id="content">
                 {% block content %}{% endblock %}
             </div>

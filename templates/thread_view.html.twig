@@ -1,12 +1,23 @@
 {% extends "master.html.twig" %}
 
-{% block title %}View Thread{% endblock title %}
+{% block title %}{{thread.title}}{% endblock title %}
 
 {% block content %}
-    <ul>
-        {% for thread in postList %}
-            <li>{{thread.title}}</li>
-            <li>{{thread.body}}</li>
+    
+    <h1>{{thread.title}}</h1>
+    
+    <div class="postListContainer">
+        {% for p in postList %}
+            <div class="postContainer"><p>{{p.username}} posted on {{p.date}}</p>
+                <div class="postBody">{{p.body}}</div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
+    {% if user %}
+    <form class="replyForm" method="post">
+        <textarea name="body"></textarea><br>
+        <input type="submit" value="Reply">
+    </form>
+    {% endif %}
+    <!-- Thinking of adding "Reply" button here which links to the reply to thread form, but would rather have it appear on one page rather than link to a new one -->
 {% endblock content %}
