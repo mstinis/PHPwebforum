@@ -19,7 +19,7 @@ DB::$host = '127.0.0.1';
 DB::$user = 'phpwebforum';
 DB::$password = '5zAijLF4Ooaojs6O';
 DB::$dbName = 'phpwebforum';
-DB::$port = 3333;
+DB::$port = 3306;
 DB::$encoding = 'utf8';
 
 DB::$error_handler = 'sql_error_handler';
@@ -61,9 +61,6 @@ if (!isset($_SESSION['user'])) {
 $twig = $app->view()->getEnvironment();
 $twig->addGlobal('user', $_SESSION['user']);
 
-//$app->get('/', function() use ($app) {
-//    $app->render('index_please_login.html.twig');
-//});
 // REGISTER FORM
 $app->get('/register', function() use ($app) {
     $app->render('register.html.twig');
@@ -147,16 +144,18 @@ $app->get('/logout', function() use ($app) {
 
 // END LOGIN
 // BOARD CODE
-
 $app->get('/', function() use ($app) {
     $boardList = DB::query("SELECT * FROM boards");
     $app->render('board_list.html.twig', array("boardList" => $boardList));
 });
 
+// SEARCH CODE
 $app->get('/search', function() use ($app) {
     $keywords = $app->request()->get('keywords');
     // fixmeeee
 });
+
+// END SEARCH
 
 //// list of threads in a board
 $app->get('/board/:id', function($id) use ($app) {
@@ -198,13 +197,18 @@ $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
     if (strlen($title) < 2 || strlen($title) > 100) {
         array_push($errorList, "Title must be between 2 and 100 characters");
     }
-    if (strlen($body) < 1 || strpos($body, 'Enter body here...') !== false) {
+    if (strlen($body) == 0) {
         array_push($errorList, "Body must not be empty");
     }
     // TODO: generate date according to date of thread creation    
-    $date = date('m/d/Y h:i:s a', time());
+    $date = date('Y-m-d H:i:s');
     // receive data and insert
-    if (!$errorList) {
+    
+    if ($errorList) {
+        $app->render('thread_new.html.twig', array(
+            'errorList' => $errorList
+        ));
+    } else {
         DB::insert('threads', array(
             'boardId' => $boardId,
             'title' => $title,
@@ -214,15 +218,10 @@ $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
         DB::insert('posts', array(
             'threadId' => $threadId,
             'userId' => $userId,
-            'title' => $title,
             'body' => $body,
             'date' => $date
         ));
-        $app->render('thread_new_success.html.twig', array('threadId' => $threadId));
-    } else {
-        $app->render('thread_new.html.twig', array(
-            'p' => $postList
-        ));
+        $app->render('thread_view.html.twig', array('threadId' => $threadId, 'p' => $postList));
     }
 });
 
@@ -242,8 +241,10 @@ $app->get('/thread/:threadId', function($threadId) use ($app) {
 
 $app->post('/thread/:threadId', function($threadId) use ($app) {
     // handle the submission
+    $userId = $_SESSION['user']['userId'];
     $body = $app->request()->post('body');
-    // verify body not too long / short
+    $date = date('Y-m-d H:i:s');
+        // verify body not too long / short
     $errorList = array();
     if (strlen($body) < 1) {
         array_push($errorList, "Body cannot be empty when replying to a thread");
@@ -252,50 +253,16 @@ $app->post('/thread/:threadId', function($threadId) use ($app) {
     if (!$errorList) {
        // $threadId = $_SESSION['user']['threadId'];
         DB::insert('posts', array(
-            'userId' => $userId, // FIXME
             'threadId' => $threadId,
-            'body' => $body
+            'userId' => $userId,
+            'body' => $body,
+            'date' => $date
         ));
-        $app->render('thread_view.html.twig');
     }
     $thread = DB::queryFirstRow("SELECT * FROM threads WHERE threadId=%i", $threadId);
     $postList = DB::query("SELECT p.postId, p.body, p.date, u.username FROM posts p, users u WHERE p.threadId=%i AND u.userId=p.userId", $threadId);
     $app->render('thread_view.html.twig', array('thread' => $thread, 'postList' => $postList));
 });
-
-//// 3-state form to reply to a thread
-//$app->get('/thread/:threadId/reply', function() use ($app) {
-//    $app->render('thread_view.html.twig');
-//});
-//$app->post('/thread/:threadId/reply', function() use ($app) {
-//    $title = $app->request()->post('title');
-//    $body = $app->request()->post('body');
-//    $postList = array('title' => $title, 'body' => $body);
-//    // verify inputs
-//    $errorList = array();
-//    if (strlen($title) < 2 || strlen($title) > 100) {
-//        array_push($errorList, "Title must be between 2 and 100 characters");
-//    }
-//    if (strlen($body) < 1) {
-//        array_push($errorList, "Body cannot be empty when replying to a thread");
-//    }
-//    // TODO: generate date according to date of reply/post
-//    $date = date('m/d/Y h:i:s a', time());
-//    // receive data and insert
-//    if (!$errorList) {
-//        $threadId = $_SESSION['user']['id'];
-//        DB::insert('thread', array(
-//            'threadId' => $threadId,
-//            'title' => $title,
-//            'body' => $body
-//        ));
-//        $app->render('reply_new_success.html.twig');
-//    } else {
-//        $app->render('reply_new.html.twig', array(
-//            'p' => $postList
-//        ));
-//    }
-//});
 
 
 $app->run();
