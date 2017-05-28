@@ -1,33 +1,71 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="/styles.css"/>
+        <link rel="stylesheet" href="../styles/bulma.min.css">
+        <link rel="stylesheet" href="../styles/custom.css">
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
-        {% block headExtra %}{% endblock %}
-    </head>
-    <body>
-        <div id="centerContent">
-            <div id="header">
+    {% block headExtra %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <nav class="nav" id="header">
+            <div class="nav-left">
                 {% if user %}
-                    Welcome {{ user.username }}, you may <a href="/logout">logout</a>
+                    <span class="nav-item">Welcome, {{ user.username }}.</span> 
+                    <div class="nav-item">
+                        <a class="button" href="/logout">Logout</a>
+                    </div>
                 {% else %}
-                    You may <a href="/login">login</a> or <a href="/register">register</a>.
+                    <div class="nav-item">
+                        <div class="field is-grouped">
+                            <p class="control">
+                                <a class="button" href="/login">Login</a>
+                            </p>
+                            <p class="control">
+                                <a class="button" href="/register">Register</a>
+                            </p>
+                        </div>
+                    </div>
                 {% endif %}
-                <p>Return to <a href="/">board directory</a><p>
-                <form method="get" action="/search">
-                    <input type="text" name="keywords">
-                    <input type="submit" value="Search">
-                </form>
-            </div>            
-            <div id="content">
-                {% block content %}{% endblock %}
+                <div class="nav-item">
+                    <a class="button" href="/">All boards</a>
+                </div>
             </div>
-            <div id="footer">
+            <div class="nav-right">
+                <div class="nav-item">
+                    <div class="field has-addons">
+                        <form method="get" action="/search">
+                            <p class="control">
+                                <input class="input" type="text" name="keywords">
+                            </p>
+                            <p class="control">
+                                <input class="button" type="submit" value="Search">
+                            <p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <section class="section">             
+        <div class="container" id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
                 {% block footer %}
-                    &copy; Copyright 9999 by <a href="http://domain.invalid/">me</a>.
+                    <p>
+                        &copy; Copyright 10,000 BC by <a href="http://domain.invalid/">Matthew</a>.
+                    </p>
                 {% endblock %}
             </div>
         </div>
-    </body>
+    </footer>
+
+</body>
 </html>

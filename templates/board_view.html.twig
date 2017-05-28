@@ -4,13 +4,18 @@
 
 {% block content %}
 
-<section>
-    <h1>{{board.title}}</h1>
-    <a href="/board/{{board.boardId}}/newthread">Start new thread</a>
-    <p>Threads:</p>
-    {% for thread in threadList %}
-        <a href="/thread/{{thread.threadId}}">{{thread.title}}</a><br>
-    {% endfor %}
-</section>
-    
+    <section class="section">
+        <h1 class="title is-1">{{board.title}}</h1>
+        <div class="block">
+            <a class="button" href="/board/{{board.boardId}}/newthread">Start new thread</a>
+        </div>
+        {% for thread in threadList %}
+            <div class="container">
+                <div class="menu">
+                    <a href="/thread/{{thread.threadId}}">{{thread.title}}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
 {% endblock content %}

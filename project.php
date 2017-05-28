@@ -152,7 +152,8 @@ $app->get('/', function() use ($app) {
 // SEARCH CODE
 $app->get('/search', function() use ($app) {
     $keywords = $app->request()->get('keywords');
-    // fixmeeee
+    $searchResults = DB::query("SELECT * FROM posts WHERE body LIKE %ss0", $keywords);
+    $app->render('search_results.html.twig', array("searchResults" => $searchResults));
 });
 
 // END SEARCH

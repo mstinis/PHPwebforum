@@ -1,0 +1,5 @@
+{% for p in searchResults %}
+    <div class="searchContainer"><p>{{p.username}} posted on {{p.date}}</p>
+        <div class="postBody">{{p.body}}</div>
+    </div>
+{% endfor %}
