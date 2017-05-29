@@ -3,21 +3,34 @@
 {% block title %}{{thread.title}}{% endblock title %}
 
 {% block content %}
-    
+
+    {# <div class="block">
+             <a class="button" href="/board/:id">{{board.title}}</a>
+     </div>#}
+
     <h1 class="title is-1">{{thread.title}}</h1>
-    
-    <div class="postListContainer">
+
+    <div>
         {% for p in postList %}
-            <div class="postContainer"><p>{{p.username}} posted on {{p.date}}</p>
-                <div class="postBody">{{p.body}}</div>
-            </div>
+            <article class="message">
+                <div class="message-header"><p>{{p.username}} posted on {{p.date}}</p>
+                </div>
+                <div class="message-body">{{p.body}}</div>
+            </article>
         {% endfor %}
     </div>
     {% if user %}
-    <form class="replyForm" method="post">
-        <textarea name="body" placeholder="Enter reply here..."></textarea><br>
-        <input type="submit" value="Reply">
-    </form>
+        <div class="container">
+            <hr>
+            <form method="post">
+                <div class="field">
+                    <p class="control">
+                        <textarea class="textarea" name="body" placeholder="Enter reply here..."></textarea>
+                </div>
+                <input class="button" type="submit" value="Reply">
+            </form>
+        </div>
     {% endif %}
     <!-- Thinking of adding "Reply" button here which links to the reply to thread form, but would rather have it appear on one page rather than link to a new one -->
 {% endblock content %}
+

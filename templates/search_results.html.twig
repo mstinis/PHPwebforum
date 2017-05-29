@@ -1,5 +1,15 @@
-{% for p in searchResults %}
-    <div class="searchContainer"><p>{{p.username}} posted on {{p.date}}</p>
-        <div class="postBody">{{p.body}}</div>
-    </div>
-{% endfor %}
+{% extends "master.html.twig" %}
+
+{% block title %}Search Results{% endblock title %}
+
+{% block content %}
+    <h1 class="title is-1">Results</h1>
+    {% for p in searchResults %}
+        <article class="message">
+        <div class="message-header"><p>Posted on {{p.date}}</p>
+        </div>
+        <div class="message-body">{{p.body}}</div>
+        
+        </article>
+    {% endfor %}
+{% endblock content %}

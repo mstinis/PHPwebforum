@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="../styles/bulma.min.css">
-        <link rel="stylesheet" href="../styles/custom.css">
+        <link rel="stylesheet" href="http://localhost:8008/styles/bulma.min.css">
+        <link rel="stylesheet" href="http://localhost:8008/styles/custom.css">
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
     {% block headExtra %}{% endblock %}
@@ -12,7 +12,7 @@
         <nav class="nav" id="header">
             <div class="nav-left">
                 {% if user %}
-                    <span class="nav-item">Welcome, {{ user.username }}.</span> 
+                    <span class="nav-item">Welcome, {{ user.username }}</span> 
                     <div class="nav-item">
                         <a class="button" href="/logout">Logout</a>
                     </div>
@@ -60,7 +60,7 @@
             <div class="content has-text-centered">
                 {% block footer %}
                     <p>
-                        &copy; Copyright 10,000 BC by <a href="http://domain.invalid/">Matthew</a>.
+                        &copy; Copyright 10,000 BC by <a href="http://domain.invalid/">Matthew</a>
                     </p>
                 {% endblock %}
             </div>

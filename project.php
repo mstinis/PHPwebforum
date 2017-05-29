@@ -133,13 +133,13 @@ $app->post('/login', function() use ($app) {
     } else {
         unset($user['password']);
         $_SESSION['user'] = $user;
-        $app->render('login_success.html.twig');
+        $app->redirect('/');
     }
 });
 
 $app->get('/logout', function() use ($app) {
     unset($_SESSION['user']);
-    $app->render('logout.html.twig');
+    $app->redirect('/');
 });
 
 // END LOGIN
@@ -177,16 +177,18 @@ $app->get('/thread/:threadId', function($threadId) use ($app) {
 
 // 3-state form to create new thread in a board
 $app->get('/board/:boardId/newthread', function($boardId) use ($app) {
-    // FIXME: only logged in users can access
+    if (!$_SESSION['user']) {
+        $app->render('login.html.twig');
+        return;
+    }
     $board = DB::queryFirstRow("SELECT * FROM boards WHERE boardId=%i", $boardId);
     $app->render('thread_new.html.twig', array('board' => $board));
     // print_r($boardId);
 });
 
 $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
-    // FIXME: only logged in users can access
     if (!$_SESSION['user']) {
-        $app->render('forbidden.html.twig');
+        $app->render('login.html.twig');
         return;
     }
     $userId = $_SESSION['user']['userId'];
@@ -200,8 +202,7 @@ $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
     }
     if (strlen($body) == 0) {
         array_push($errorList, "Body must not be empty");
-    }
-    // TODO: generate date according to date of thread creation    
+    } 
     $date = date('Y-m-d H:i:s');
     // receive data and insert
     
@@ -236,8 +237,11 @@ $app->get('/thread/:threadId', function($threadId) use ($app) {
         return;
     }
     $thread = DB::queryFirstRow("SELECT * FROM threads WHERE threadId=%i", $threadId);
+    $boardId = $thread['boardId'];
+    $board = DB::query("SELECT * FROM boards WHERE boardId=%i", $boardId);
+    $boardName = $board['title'];
     $postList = DB::query("SELECT p.postId, p.body, p.date, u.username FROM posts p, users u WHERE p.threadId=%i AND u.userId=p.userId", $threadId);
-    $app->render('thread_view.html.twig',  array('thread' => $thread, 'postList' => $postList));
+    $app->render('thread_view.html.twig',  array('boardName' => $boardName, 'thread' => $thread, 'postList' => $postList));
 });
 
 $app->post('/thread/:threadId', function($threadId) use ($app) {

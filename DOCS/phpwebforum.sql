@@ -2,8 +2,8 @@
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3333
--- Generation Time: May 26, 2017 at 07:54 PM
+-- Host: 127.0.0.1
+-- Generation Time: May 29, 2017 at 08:48 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -50,8 +50,7 @@ CREATE TABLE `posts` (
   `postId` int(11) NOT NULL,
   `threadId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `title` varchar(100) DEFAULT NULL,
+  `date` datetime NOT NULL,
   `body` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
@@ -59,14 +58,25 @@ CREATE TABLE `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`postId`, `threadId`, `userId`, `date`, `title`, `body`) VALUES
-(1, 1, 3, '0000-00-00', 'Hello!', 'My first post'),
-(2, 2, 3, '0000-00-00', 'I LOVE microkorgs!!!', 'Not.'),
-(3, 3, 3, '0000-00-00', 'I saw Sunn O)))', 'Got tinnitus as a result :D'),
-(4, 4, 3, '0000-00-00', 'woW ME', 'Enter body here...'),
-(5, 5, 2, '0000-00-00', 'Empty body', ''),
-(6, 6, 2, '0000-00-00', 'I like noise music', 'In other words: It is screeching, pounding dissonance. It is not music.'),
-(7, 7, 3, '0000-00-00', 'Hello Chen', 'I am here!');
+INSERT INTO `posts` (`postId`, `threadId`, `userId`, `date`, `body`) VALUES
+(1, 1, 3, '0000-00-00 00:00:00', 'My first post'),
+(2, 2, 3, '0000-00-00 00:00:00', 'Not.'),
+(3, 3, 3, '0000-00-00 00:00:00', 'Got tinnitus as a result :D'),
+(4, 4, 3, '0000-00-00 00:00:00', 'Enter body here...'),
+(5, 5, 2, '0000-00-00 00:00:00', ''),
+(6, 6, 2, '0000-00-00 00:00:00', 'In other words: It is screeching, pounding dissonance. It is not music.'),
+(7, 7, 3, '0000-00-00 00:00:00', 'I am here!'),
+(8, 7, 2, '2017-06-27 00:00:00', 'So am I'),
+(11, 7, 1, '0000-00-00 00:00:00', 'Fuckboi dleux'),
+(12, 7, 1, '0000-00-00 00:00:00', 'Fuckboi dleux'),
+(13, 7, 1, '0000-00-00 00:00:00', 'I\'m a fool'),
+(14, 7, 1, '0000-00-00 00:00:00', 'I\'m a fool'),
+(15, 7, 1, '0000-00-00 00:00:00', 'hi'),
+(16, 6, 1, '2017-05-27 18:55:29', 'Yes it is'),
+(17, 8, 1, '2017-05-27 19:00:49', 'Sorry PHP'),
+(18, 9, 1, '2017-05-27 19:08:12', 'Thank you PHP'),
+(19, 10, 2, '2017-05-28 00:49:45', '<?@#$(* hello'),
+(20, 1, 3, '2017-05-28 23:40:34', 'yadayada');
 
 -- --------------------------------------------------------
 
@@ -94,7 +104,10 @@ INSERT INTO `threads` (`threadId`, `boardId`, `title`, `date`, `replies`, `views
 (4, 3, 'woW ME', '0000-00-00', 0, 0),
 (5, 1, 'Empty body', '0000-00-00', 0, 0),
 (6, 1, 'I like noise music', '0000-00-00', 0, 0),
-(7, 1, 'Hello Chen', '0000-00-00', 0, 0);
+(7, 1, 'Hello Chen', '0000-00-00', 0, 0),
+(8, 1, 'PHP SUCKS', '2017-05-27', 0, 0),
+(9, 2, 'I LOVE PHP', '2017-05-27', 0, 0),
+(10, 1, 'TestChris', '2017-05-28', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -162,12 +175,12 @@ ALTER TABLE `boards`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `postId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `threads`
 --
 ALTER TABLE `threads`
-  MODIFY `threadId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `threadId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `users`
 --

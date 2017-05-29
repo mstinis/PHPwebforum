@@ -4,11 +4,15 @@
 
 {% block content %}
 
-<section>
-    <h1 class="title is-1">Boards</h1>
-    {% for board in boardList %}
-        <a href="/board/{{board.boardId}}">{{board.title}}</a><br>
-    {% endfor %}
-</section>
-    
+
+        <h1 class="title is-1">Boards</h1>
+        <aside class="menu">
+            <ul class="menu-list">
+                {% for board in boardList %}
+                    <li><a href="/board/{{board.boardId}}">{{board.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </aside>
+
+
 {% endblock content %}
