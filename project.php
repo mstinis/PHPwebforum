@@ -15,11 +15,11 @@ $log = new Logger('main');
 $log->pushHandler(new StreamHandler('logs/everything.log', Logger::DEBUG));
 $log->pushHandler(new StreamHandler('logs/errors.log', Logger::ERROR));
 
-DB::$host = '127.0.0.1';
-DB::$user = 'phpwebforum';
+//DB::$host = '127.0.0.1';
+DB::$user = 'cp4776_webforum';
 DB::$password = '5zAijLF4Ooaojs6O';
-DB::$dbName = 'phpwebforum';
-DB::$port = 3306;
+DB::$dbName = 'cp4776_webforum';
+//DB::$port = 3333;
 DB::$encoding = 'utf8';
 
 DB::$error_handler = 'sql_error_handler';
@@ -205,7 +205,7 @@ $app->get('/board/:id', function($id) use ($app) {
 // view of one thread on a board
 $app->get('/thread/:threadId', function($threadId) use ($app) {
     $thread = DB::queryFirstRow("SELECT * FROM threads WHERE threadId=%i", $threadId);
-    $postList = DB::query("SELECT p.postId, p.body, p.date, u.username FROM posts p, users u WHERE p.threadId=%i AND u.userId=p.userId", $threadId);
+    $postList = DB::query("SELECT p.postId, p.body, p.date, u.username FROM posts p, users u WHERE p.threadId=%i AND u.userId=p.userId ORDER BY date ASC", $threadId);
     $app->render('thread_view.html.twig', array('thread' => $thread, 'postList' => $postList));
 });
 
@@ -217,6 +217,7 @@ $app->get('/board/:boardId/newthread', function($boardId) use ($app) {
     }
     $board = DB::queryFirstRow("SELECT * FROM boards WHERE boardId=%i", $boardId);
     $app->render('thread_new.html.twig', array('board' => $board));
+    // print_r($boardId);
 });
 
 $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
@@ -256,7 +257,7 @@ $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
             'body' => $body,
             'date' => $date
         ));
-        $app->render('thread_view.html.twig', array('threadId' => $threadId, 'p' => $postList));
+        $app->render('thread_new_success.html.twig', array('threadId' => $threadId, 'p' => $postList));
     }
 });
 
