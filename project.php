@@ -149,6 +149,40 @@ $app->get('/', function() use ($app) {
     $app->render('board_list.html.twig', array("boardList" => $boardList));
 });
 
+// 3-state form to create new board
+$app->get('/board/newboard', function() use ($app) {
+    if (!$_SESSION['user']) {
+        $app->render('login.html.twig');
+        return;
+    }
+    $app->render('board_new.html.twig');
+});
+
+$app->post('/board/newboard', function() use ($app) {
+    if (!$_SESSION['user']) {
+        $app->render('login.html.twig');
+        return;
+    }
+    $title = $app->request()->post('title');
+    // verify inputs
+    $errorList = array();
+    if (strlen($title) < 2 || strlen($title) > 100) {
+        array_push($errorList, "Title must be between 2 and 100 characters");
+    }   
+    if ($errorList) {
+        $app->render('board_list.html.twig', array(
+            'errorList' => $errorList
+        ));
+    } else {
+        DB::insert('boards', array(
+            'title' => $title
+        ));
+        $app->redirect('/');
+    }
+});
+
+// END BOARD CODE
+
 // SEARCH CODE
 $app->get('/search', function() use ($app) {
     $keywords = $app->request()->get('keywords');
@@ -183,7 +217,6 @@ $app->get('/board/:boardId/newthread', function($boardId) use ($app) {
     }
     $board = DB::queryFirstRow("SELECT * FROM boards WHERE boardId=%i", $boardId);
     $app->render('thread_new.html.twig', array('board' => $board));
-    // print_r($boardId);
 });
 
 $app->post('/board/:boardId/newthread', function($boardId) use ($app) {
