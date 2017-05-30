@@ -5,14 +5,17 @@
 {% block content %}
 
 
-        <h1 class="title is-1">Boards</h1>
-        <aside class="menu">
-            <ul class="menu-list">
-                {% for board in boardList %}
-                    <li><a href="/board/{{board.boardId}}">{{board.title}}</a></li>
+    <h1 class="title is-1">Boards</h1>
+    <div class="block">
+        <a class="button" href="/board/newboard{#board/{{board.boardId}}#}">New Board</a>
+    </div>
+    <aside class="menu">
+        <ul class="menu-list">
+            {% for board in boardList %}
+                <li><a href="/board/{{board.boardId}}">{{board.title}}</a></li>
                 {% endfor %}
-            </ul>
-        </aside>
+        </ul>
+    </aside>
 
 
 {% endblock content %}
